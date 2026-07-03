@@ -2,8 +2,9 @@
 
 Local database and operations hub for defeating homelessness — one daily 15-minute briefing at a time.
 
+**GitHub:** https://github.com/xstrawman/housing-command-center  
 **Full session archive:** [`COMPLETE_README.md`](COMPLETE_README.md) — everything built July 3, 2026 (user prompts, agent reasoning, architecture, code inventory).  
-**Whitepaper (PDF):** [`docs/whitepaper/Housing_Command_Center_Whitepaper.pdf`](docs/whitepaper/Housing_Command_Center_Whitepaper.pdf) (10 pages)
+**Whitepaper (PDF):** on Trom Files only → `HousingCommandCenter/Housing_Command_Center_Whitepaper.pdf` (markdown source in `docs/whitepaper/`)
 
 ## What's here now
 
