@@ -1,0 +1,7 @@
+Tighten this outreach email for Chad Brizendine. Keep every waitlist question, stay professional and concise. Do not invent facts. Output only the email body (no subject line).
+
+Property: {{property_name}}
+Address: {{address}}, {{city}} {{zip}}
+Phone on file: {{phone}}
+
+{{body}}

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "description": "Benchmark cases mirroring Housing Command Center agent prompts",
+  "system_prefix": "/no_think\n",
+  "cases": [
+    {
+      "id": "briefing_polish",
+      "agent": "strategist",
+      "max_tokens": 400,
+      "temperature": 0.3,
+      "prompt": "Rewrite this housing briefing summary in 3 short, direct sentences for Chad:\nFocus area: 218 properties (80203 + west corridor).\nUnknown waitlists: 142. Partial records: 31.\nDue for follow-up: 218.\nToday's plan: 8 tasks, ~15 minutes."
+    },
+    {
+      "id": "outreach_polish_sample",
+      "agent": "outreach",
+      "max_tokens": 600,
+      "temperature": 0.3,
+      "prompt": "Tighten this outreach email (keep all questions, stay professional):\n\nProperty: Sunridge Apartments\nAddress: 1234 W Colfax Ave, Denver 80204\nPhone on file: (303) 555-0100\n\nHello,\n\nI am searching for affordable housing and reaching out to learn about your waitlist.\n\n- Are you accepting applications for low income housing?\n- How long is the wait list?\n- What is the typical rent amount for the type of apartment I require?\n- What documents are needed for the application?\n\nThank you for your time.\n\nChad Brizendine\ntherealchadbrizendine@yahoo.com\n(303) 900-3287"
+    },
+    {
+      "id": "waitlist_parse_closed",
+      "agent": "parser",
+      "max_tokens": 500,
+      "temperature": 0.1,
+      "prompt": "Extract waitlist intelligence from this property email reply. Return ONLY valid JSON matching the schema (no markdown):\n\n{\n  \"property_name\": \"string\",\n  \"status\": \"unknown|closed|open|opening_soon|by_appointment|lottery|not_applicable\",\n  \"wait_time_estimate\": \"string\",\n  \"application_method\": \"string\",\n  \"application_fee\": null,\n  \"documents_required\": \"string\",\n  \"contact_name\": \"string\",\n  \"contact_phone\": \"string\",\n  \"contact_email\": \"string\",\n  \"confidence_score\": 0.0-1.0,\n  \"raw_notes\": \"string\"\n}\n\nProperty: Villa Park Senior Living\nReply:\nHi Chad,\n\nThank you for your interest. Our waitlist is currently closed and we are not accepting new applications at this time. We typically open once per year in March for about two weeks. The last opening was March 2025.\n\nApplication fee is $35 (non-refundable). Required documents: photo ID, birth certificate, proof of income for all household members, and landlord references.\n\nPlease contact our office manager Maria Lopez at (303) 555-0199 ext 2 or leasing@villapark.org if you have questions.\n\nBest,\nLeasing Office"
+    },
+    {
+      "id": "waitlist_parse_open",
+      "agent": "parser",
+      "max_tokens": 500,
+      "temperature": 0.1,
+      "prompt": "Extract waitlist intelligence from this property email reply. Return ONLY valid JSON matching the schema (no markdown):\n\n{\n  \"property_name\": \"string\",\n  \"status\": \"unknown|closed|open|opening_soon|by_appointment|lottery|not_applicable\",\n  \"wait_time_estimate\": \"string\",\n  \"application_method\": \"string\",\n  \"application_fee\": null,\n  \"documents_required\": \"string\",\n  \"contact_name\": \"string\",\n  \"contact_phone\": \"string\",\n  \"contact_email\": \"string\",\n  \"confidence_score\": 0.0-1.0,\n  \"raw_notes\": \"string\"\n}\n\nProperty: Westside Family Homes\nReply:\nHello,\n\nWe are accepting applications! Current wait for a 2BR is approximately 18-24 months. We have 12 two-bedroom units in the LIHTC program. Rent is income-based, roughly $850-$1,100 for your income bracket.\n\nApply in person Mon-Thu 9am-4pm at 4500 W 38th Ave. Bring ID, SSN cards, 2 months pay stubs, and bank statements. $25 application fee — receipt provided on the spot.\n\nCall Angela at 303-555-0144.\n\nThanks,\nWestside Management"
+    },
+    {
+      "id": "task_prioritization",
+      "agent": "strategist",
+      "max_tokens": 300,
+      "temperature": 0.2,
+      "prompt": "Given 218 affordable housing properties near Denver 80203, 142 with unknown waitlist status, and 3 properties that may open within 14 days, list the top 3 actions Chad should take today in under 15 minutes. Be specific and actionable. One line per action."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.HCC" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#0f3d4c</item>
+        <item name="colorPrimaryVariant">#12313c</item>
+        <item name="colorOnPrimary">#edf6f9</item>
+        <item name="android:statusBarColor">#0b1f26</item>
+        <item name="android:navigationBarColor">#0b1f26</item>
+    </style>
+</resources>

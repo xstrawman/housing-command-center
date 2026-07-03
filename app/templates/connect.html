@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% set active = 'connect' %}
+{% block title %}Connect Phone — Housing Command Center{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Open on your phone</h1>
+  <p class="lede">Same Wi‑Fi as this computer. Scan the code or tap the link, then <strong>Install app</strong> in Chrome.</p>
+</section>
+
+<section class="card connect-card">
+  {% if phone_url and qr_url %}
+  <img src="{{ qr_url }}" alt="QR code for phone URL" width="240" height="240" class="qr">
+  <p class="phone-link"><a href="{{ phone_url }}">{{ phone_url }}</a></p>
+  {% else %}
+  <p class="muted">Could not detect LAN IP. Run <code>hcc url</code> in a terminal.</p>
+  {% endif %}
+  <p class="muted">This PC: <a href="{{ local_url }}">{{ local_url }}</a></p>
+</section>
+
+<section class="card">
+  <h2>Quick start on this machine</h2>
+  <p>Type <code>hcc</code> in terminal or click the <strong>Housing Command</strong> desktop icon.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{
+  "name": "Housing Command Center",
+  "short_name": "HCC",
+  "description": "Daily housing briefing, tasks, and waitlist outreach",
+  "start_url": "/today",
+  "display": "standalone",
+  "background_color": "#0b1f26",
+  "theme_color": "#0f3d4c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

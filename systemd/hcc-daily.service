@@ -1,0 +1,15 @@
+[Unit]
+Description=Housing Command Center — daily agent briefing
+After=network-online.target nollama.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/housing-command-center
+Environment=HCC_LLM_ENABLED=0
+ExecStart=%h/agentic-ai/venv/bin/python3 scripts/run_daily.py
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

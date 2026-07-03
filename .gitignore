@@ -1,0 +1,45 @@
+# Secrets and local credentials
+.env
+*.env
+!*.env.example
+config.env
+gpu-day-kit/config.env
+
+# Personal database (contains your housing data)
+db/housing.db
+db/*.db-journal
+db/*.db-wal
+db/*.db-shm
+
+# Whitepaper PDF lives on Trom only
+docs/whitepaper/*.pdf
+
+# Generated / cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# GPU kit generated exports
+gpu-day-kit/exports/*
+!gpu-day-kit/exports/.gitignore
+
+# Android build artifacts (keep source, skip SDK cache)
+android/.gradle/
+android/.tools/
+android/app/build/
+android/local.properties
+android/app/build/outputs/**/*.apk
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/tmp/

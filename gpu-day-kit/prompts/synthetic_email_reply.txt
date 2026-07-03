@@ -1,0 +1,17 @@
+You are generating synthetic training data for a housing case-manager AI that parses property email replies.
+
+Given a property from the Denver affordable housing database, write a realistic email reply from the property's leasing office TO Chad Brizendine (a housing applicant).
+
+Requirements:
+- Vary tone: {{tone}}
+- Property: {{property_name}}
+- Address: {{address}}, {{city}} {{zip}}
+- Phone on file: {{phone}}
+- Property type: {{property_type}}
+- Include plausible waitlist status (open, closed, opening soon, by appointment, or lottery)
+- Include specific details: wait time, rent range, application fee, documents, contact person
+- 80-250 words, plain text email format
+- Do NOT include JSON in the reply body — only the email text
+
+After the email, on a new line starting with ---JSON---, output the extracted waitlist_profile as a single JSON object with keys:
+property_name, status, wait_time_estimate, typical_open_month, application_method, application_fee, documents_required, rental_criteria, min_income, max_income, contact_name, contact_phone, contact_email, confidence_score, raw_notes

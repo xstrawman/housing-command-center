@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% set active = 'outreach' %}
+{% block title %}{{ item.property_name }} — Outreach{% endblock %}
+
+{% block content %}
+<section class="hero compact">
+  <a href="/outreach" class="back">← Outreach</a>
+  <h1>{{ item.property_name or 'Outreach draft' }}</h1>
+  <p class="meta">{{ item.address }}, {{ item.city }} {{ item.zip }}</p>
+  {% if item.phone %}<p class="meta">Phone: <a href="tel:{{ item.phone }}">{{ item.phone }}</a></p>{% endif %}
+</section>
+
+{% if item.error_message %}
+<section class="card urgent-card">
+  <p>{{ item.error_message }}</p>
+</section>
+{% endif %}
+
+<section class="card">
+  <p class="eyebrow">Recipient (get from phone call)</p>
+  <form method="post" action="/outreach/{{ item.id }}/save" class="search-form">
+    <input type="email" name="recipient_email" placeholder="manager@property.com"
+           value="{{ item.recipient_email or item.property_email or '' }}" required>
+    <button type="submit" class="btn ghost">Save</button>
+  </form>
+  <p class="muted" style="margin-top:.5rem">Most listings only have phone numbers. Call first, ask for their waitlist email.</p>
+
+  <p class="eyebrow" style="margin-top:1rem">Subject</p>
+  <h2 class="subject">{{ item.subject }}</h2>
+  <p class="eyebrow">Body</p>
+  <pre class="email-body">{{ item.body }}</pre>
+</section>
+
+<section class="actions-bar print-hide">
+  {% if item.status == 'draft' or item.status == 'failed' %}
+  <form method="post" action="/outreach/{{ item.id }}/approve">
+    <input type="hidden" name="recipient_email" value="{{ item.recipient_email or item.property_email or '' }}">
+    <button type="submit" class="btn primary">Approve</button>
+  </form>
+  <form method="post" action="/outreach/{{ item.id }}/send">
+    <button type="submit" class="btn primary">Approve &amp; send now</button>
+  </form>
+  {% elif item.status == 'approved' %}
+  <form method="post" action="/outreach/{{ item.id }}/send">
+    <button type="submit" class="btn primary">Send via Yahoo</button>
+  </form>
+  <span class="badge ok">Approved</span>
+  {% elif item.status == 'sent' %}
+  <span class="badge ok">Sent {{ item.sent_at or '' }}</span>
+  {% else %}
+  <span class="badge">{{ item.status }}</span>
+  {% endif %}
+  <button type="button" class="btn ghost" onclick="window.print()">Print</button>
+</section>
+{% endblock %}

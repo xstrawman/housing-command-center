@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <rect width="128" height="128" rx="24" fill="#0f3d4c"/>
+  <path d="M24 78 L64 38 L104 78 V98 H24 Z" fill="#3db8a9"/>
+  <rect x="52" y="68" width="24" height="30" fill="#0b1f26"/>
+  <text x="64" y="118" text-anchor="middle" fill="#edf6f9" font-size="16" font-family="system-ui,sans-serif" font-weight="700">HCC</text>
+</svg>

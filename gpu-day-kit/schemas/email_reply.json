@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SyntheticEmailReply",
+  "type": "object",
+  "required": ["property_name", "reply_body", "extracted"],
+  "properties": {
+    "property_name": { "type": "string" },
+    "reply_body": { "type": "string" },
+    "tone": {
+      "type": "string",
+      "enum": ["helpful", "terse", "redirect", "voicemail_style", "auto_reply", "out_of_office"]
+    },
+    "extracted": { "$ref": "waitlist_profile.json" }
+  },
+  "additionalProperties": false
+}

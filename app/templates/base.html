@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f3d4c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <title>{% block title %}Housing Command Center{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">HCC</span>
+      <span class="brand-text">Housing Command</span>
+    </div>
+    <nav class="nav">
+      <a href="/today" class="{% if active == 'today' %}active{% endif %}">Today</a>
+      <a href="/outreach" class="{% if active == 'outreach' %}active{% endif %}">Outreach</a>
+      <a href="/properties" class="{% if active == 'properties' %}active{% endif %}">Properties</a>
+      <a href="/connect" class="{% if active == 'connect' %}active{% endif %}">Phone</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <span>80203 + west corridor{% if focus_count is defined and focus_count is not none %} · {{ focus_count }} properties{% endif %}</span>
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

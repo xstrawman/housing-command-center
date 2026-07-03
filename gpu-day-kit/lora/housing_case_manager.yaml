@@ -1,0 +1,53 @@
+# Housing case-manager LoRA — Qwen3-8B on 96GB VRAM GPU rental
+# Works with LLaMA-Factory, Axolotl, or Unsloth (adjust keys per tool)
+#
+# Train AFTER generating synthetic data:
+#   merge_synthetic.py → exports/housing_case_manager_train.jsonl
+
+model_name_or_path: Qwen/Qwen3-8B
+# Or use Heretic output: ~/models/Qwen3-8B-heretic
+
+stage: sft
+do_train: true
+finetuning_type: lora
+
+# LoRA — conservative to preserve base reasoning
+lora_rank: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target: all-linear
+# Unsloth alternative: target_modules [q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj]
+
+dataset: housing_case_manager
+dataset_dir: ../exports
+template: qwen3
+cutoff_len: 4096
+max_samples: 10000
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+# 96GB VRAM — can push batch size
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+learning_rate: 2.0e-5
+num_train_epochs: 2
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+bf16: true
+gradient_checkpointing: true
+
+output_dir: ../exports/lora-housing-case-manager
+logging_steps: 10
+save_steps: 200
+eval_steps: 200
+evaluation_strategy: steps
+val_size: 0.05
+
+# Task mix (instruction tuning)
+# 60% waitlist JSON parse from synthetic email replies
+# 30% outreach email polish
+# 10% briefing summarization (add manually or from benchmark outputs)
+
+system_prompt: |
+  You are a housing case-manager assistant for Denver affordable housing.
+  Be accurate, never invent waitlist facts, and output structured JSON when asked.

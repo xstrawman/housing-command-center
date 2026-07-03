@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% set active = 'today' %}
+{% block title %}Today — Housing Command Center{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">{{ today }}</p>
+  <h1>Good morning, {{ client.full_name.split()[0] }}</h1>
+  {% if briefing %}
+  <p class="lede">{{ briefing.summary }}</p>
+  {% else %}
+  <p class="lede muted">No briefing yet for today.</p>
+  <form method="post" action="/run-daily" class="inline-form">
+    <button type="submit" class="btn primary">Generate today's briefing</button>
+  </form>
+  {% endif %}
+</section>
+
+{% if urgent %}
+<section class="card urgent-card">
+  <h2>Urgent</h2>
+  <ul>
+    {% for flag in urgent %}
+    <li>{{ flag }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if briefing %}
+<section class="stats">
+  <div class="stat"><span class="num">{{ pending_tasks }}</span><span class="lbl">tasks left</span></div>
+  <div class="stat"><span class="num">{{ draft_count }}</span><span class="lbl">draft emails</span></div>
+  <div class="stat"><span class="num">~{{ briefing.estimated_minutes }}</span><span class="lbl">minutes</span></div>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h2>Today's tasks</h2>
+    <button type="button" class="btn ghost print-hide" onclick="window.print()">Print</button>
+  </div>
+  {% if tasks %}
+  <ul class="task-list">
+    {% for task in tasks %}
+    <li class="task-item {% if task.status == 'done' %}done{% endif %}">
+      <div class="task-main">
+        <span class="task-type">{{ task.task_type }}</span>
+        <strong>{{ task.title }}</strong>
+        {% if task.property_name %}<span class="meta">{{ task.property_name }}</span>{% endif %}
+        {% if task.description %}<p>{{ task.description }}</p>{% endif %}
+      </div>
+      <div class="task-actions">
+        {% if task.status != 'done' %}
+        <form method="post" action="/tasks/{{ task.id }}/done">
+          <button type="submit" class="btn small primary">Done</button>
+        </form>
+        {% else %}
+        <span class="badge ok">Done</span>
+        {% endif %}
+        {% if task.estimated_minutes %}<span class="mins">{{ task.estimated_minutes }}m</span>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No tasks in this briefing.</p>
+  {% endif %}
+</section>
+
+{% if draft_count > 0 %}
+<section class="card">
+  <h2>Outreach waiting for you</h2>
+  <p>{{ draft_count }} email draft(s) need review before sending.</p>
+  <a href="/outreach" class="btn primary">Review drafts</a>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}

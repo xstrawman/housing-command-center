@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% set active = 'outreach' %}
+{% block title %}Outreach — Housing Command Center{% endblock %}
+
+{% block content %}
+<section class="hero compact">
+  <h1>Outreach queue</h1>
+  <p class="lede">Review and approve emails before they send. Nothing goes out without you.</p>
+</section>
+
+<div class="tabs">
+  <a href="/outreach?status=draft" class="{% if status == 'draft' %}active{% endif %}">Draft ({{ counts.draft }})</a>
+  <a href="/outreach?status=approved" class="{% if status == 'approved' %}active{% endif %}">Approved ({{ counts.approved }})</a>
+  <a href="/outreach?status=sent" class="{% if status == 'sent' %}active{% endif %}">Sent ({{ counts.sent }})</a>
+</div>
+
+{% if status == 'approved' and counts.approved > 0 %}
+<section class="card">
+  <form method="post" action="/outreach/send-approved">
+    <button type="submit" class="btn primary">Send all approved ({{ counts.approved }}) via Yahoo</button>
+  </form>
+  <p class="muted">Daily cap: 5 emails. Each needs a recipient address.</p>
+</section>
+{% endif %}
+
+<section class="card">
+  {% if items %}
+  <ul class="outreach-list">
+    {% for item in items %}
+    <li>
+      <a href="/outreach/{{ item.id }}">
+        <strong>{{ item.property_name or 'Unknown property' }}</strong>
+        <span class="meta">{{ item.subject }}</span>
+        {% if item.city %}<span class="meta">{{ item.city }} {{ item.zip or '' }}</span>{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No {{ status }} outreach items.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WaitlistProfileExtraction",
+  "type": "object",
+  "required": ["property_name", "status", "confidence_score"],
+  "properties": {
+    "property_name": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["unknown", "closed", "open", "opening_soon", "by_appointment", "lottery", "not_applicable"]
+    },
+    "wait_time_estimate": { "type": "string" },
+    "typical_open_month": { "type": "string" },
+    "application_method": { "type": "string" },
+    "application_fee": { "type": ["number", "null"] },
+    "documents_required": { "type": "string" },
+    "rental_criteria": { "type": "string" },
+    "min_income": { "type": ["number", "null"] },
+    "max_income": { "type": ["number", "null"] },
+    "contact_name": { "type": "string" },
+    "contact_phone": { "type": "string" },
+    "contact_email": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "raw_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

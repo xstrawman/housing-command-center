@@ -1,0 +1,15 @@
+[Unit]
+Description=Housing Command Center Web App
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/housing-command-center
+Environment=HCC_PYTHON=%h/agentic-ai/venv/bin/python3
+ExecStart=%h/housing-command-center/scripts/start_web.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

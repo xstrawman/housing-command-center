@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Housing Command Center — one-command launcher
+# Usage: hcc | hcc open | hcc phone | hcc status | hcc url
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PORT="${HCC_PORT:-8787}"
+URL_LOCAL="http://127.0.0.1:${PORT}/today"
+URL_CONNECT="http://127.0.0.1:${PORT}/connect"
+
+lan_ip() {
+  local iface ip
+  while read -r iface ip; do
+    case "$iface" in
+      wlan*|wlp*|wl*) echo "$ip"; return 0 ;;
+    esac
+  done < <(ip -4 -o addr show scope global up 2>/dev/null | awk '
+    $2 !~ /^(lo|docker|br-|veth|virbr|tailscale)/ {
+      split($4, a, "/"); print $2, a[1]
+    }')
+  ip -4 -o addr show scope global up 2>/dev/null | awk '
+    $2 !~ /^(lo|docker|br-|veth|virbr|tailscale)/ {
+      split($4,a,"/"); print a[1]; exit
+    }'
+}
+
+ensure_running() {
+  if ! systemctl --user is-active --quiet hcc-web.service 2>/dev/null; then
+    echo "Starting Housing Command Center…"
+    systemctl --user start hcc-web.service
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+      if curl -sf "$URL_LOCAL" -o /dev/null 2>/dev/null; then
+        return 0
+      fi
+      sleep 0.5
+    done
+    echo "Web app did not respond on $URL_LOCAL" >&2
+    echo "Check: systemctl --user status hcc-web.service" >&2
+    return 1
+  fi
+}
+
+cmd="${1:-open}"
+case "$cmd" in
+  open|start|"")
+    ensure_running
+    echo "Opening $URL_LOCAL"
+    xdg-open "$URL_LOCAL" >/dev/null 2>&1 &
+    ip="$(lan_ip || true)"
+    if [[ -n "$ip" ]]; then
+      echo "Phone (same Wi‑Fi): http://${ip}:${PORT}/today"
+      echo "QR pairing page:    $URL_CONNECT"
+    fi
+    ;;
+  qr|connect)
+    ensure_running
+    xdg-open "$URL_CONNECT" >/dev/null 2>&1 &
+    ip="$(lan_ip || true)"
+    if [[ -n "$ip" && -x "$(command -v qrencode)" ]]; then
+      echo ""
+      qrencode -t ANSIUTF8 "http://${ip}:${PORT}/today"
+      echo "Scan with your phone camera → opens today's briefing"
+    else
+      echo "Open on phone: http://${ip:-<lan-ip>}:${PORT}/today"
+    fi
+    ;;
+  url)
+    ensure_running
+    echo "$URL_LOCAL"
+    ip="$(lan_ip || true)"
+    if [[ -n "$ip" ]]; then
+      echo "http://${ip}:${PORT}/today"
+    fi
+    ;;
+  status)
+    systemctl --user status hcc-web.service --no-pager || true
+    curl -sf "$URL_LOCAL" -o /dev/null && echo "HTTP: OK ($URL_LOCAL)" || echo "HTTP: not responding"
+    ;;
+  daily)
+    shift || true
+    exec "$ROOT/scripts/run_daily.py" --force "$@"
+    ;;
+  tui)
+    exec python3 "$ROOT/scripts/hcc-tui"
+    ;;
+  usb|install)
+    exec "$ROOT/scripts/phone-usb.sh"
+    ;;
+  build-apk)
+    exec "$ROOT/android/scripts/build-apk.sh"
+    ;;
+  send)
+    exec python3 "$ROOT/scripts/send_approved.py"
+    ;;
+  gpu-day)
+    shift || true
+    exec bash "$ROOT/gpu-day-kit/run.sh" "${1:-help}" "${@:2}"
+    ;;
+  trom)
+    shift || true
+    exec bash "$ROOT/scripts/trom-link.sh" "${1:-status}" "${@:2}"
+    ;;
+  termux)
+    exec "$ROOT/scripts/termux-on-phone.sh"
+    ;;
+  *)
+    echo "Housing Command Center"
+    echo ""
+    echo "  hcc          Open briefing in browser (starts server if needed)"
+    echo "  hcc qr       QR code + pairing page for your phone"
+    echo "  hcc url      Print URLs"
+    echo "  hcc status   Service health"
+    echo "  hcc daily    Regenerate today's briefing"
+    echo "  hcc tui      Terminal UI (SSH / Termux)"
+    echo "  hcc usb      USB: adb reverse + install APK"
+    echo "  hcc build-apk  Build Android APK"
+    echo "  hcc termux   Termux + SSH setup guide"
+    echo "  hcc send     Send approved emails (Himalaya/Yahoo)"
+    echo "  hcc gpu-day  GPU rental kit (prep, benchmark, Heretic, LoRA)"
+    echo "  hcc trom     Trom Files cloud (link, sync, mount)"
+    ;;
+esac

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OutreachDraft",
+  "type": "object",
+  "required": ["property_id", "subject", "body"],
+  "properties": {
+    "property_id": { "type": "integer" },
+    "property_name": { "type": "string" },
+    "subject": { "type": "string" },
+    "body": { "type": "string" },
+    "recipient_email": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

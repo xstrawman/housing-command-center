@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set active = 'properties' %}
+{% block title %}Properties — Housing Command Center{% endblock %}
+
+{% block content %}
+<section class="hero compact">
+  <h1>Focus properties</h1>
+  <form method="get" action="/properties" class="search-form">
+    <input type="search" name="q" value="{{ q }}" placeholder="Search name, address, zip…" autocomplete="off">
+    <button type="submit" class="btn primary">Search</button>
+  </form>
+</section>
+
+<section class="card">
+  <p class="muted">{{ properties|length }} shown (max 200)</p>
+  <ul class="property-list">
+    {% for p in properties %}
+    <li>
+      <strong>{{ p.name }}</strong>
+      <span class="meta">{{ p.address }}, {{ p.city }} {{ p.zip }}</span>
+      <span class="badges">
+        <span class="badge">{{ p.waitlist_status or 'unknown' }}</span>
+        {% if p.data_quality == 'partial' %}<span class="badge warn">partial data</span>{% endif %}
+        {% if p.phone %}<a class="badge link" href="tel:{{ p.phone }}">{{ p.phone }}</a>{% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
